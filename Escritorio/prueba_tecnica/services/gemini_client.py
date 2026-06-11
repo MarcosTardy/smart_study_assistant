@@ -69,26 +69,19 @@ class GeminiClient:
 
         except ImportError:
             return "Error: google-generativeai library not installed."
-        except Exception as e:
-            return f"Error generating response: {str(e)}"
-
     def generate_summary(self, text: str) -> str:
-        ""
+        """
         Generate a summary of the given text using the shared prompt template.
-        ""
+        """
         prompt = SUMMARY_PROMPT.format(text=text)
-        return self.generate_response(prompt)
-
     def generate_key_concepts(self, text: str) -> str:
-        ""
+        """
         Generate key concepts from the given text using the shared prompt template.
-        ""
+        """
         prompt = KEY_CONCEPTS_PROMPT.format(text=text)
-        return self.generate_response(prompt)
-
     def generate_exam_questions(self, text: str) -> str:
-        ""
+        """
         Generate exam questions from the given text using the shared prompt template.
-        ""
+        """
         prompt = EXAM_QUESTIONS_PROMPT.format(text=text)
         return self.generate_response(prompt)
