@@ -10,29 +10,34 @@ class GeminiClient:
     """
     Client for interacting with the Gemini API.
 
-    Handles API key management, model initialization, and prompt-based requests.
+    Responsibilities:
+    - Load API key and optional model from environment or constructor
+    - Initialize and cache the model instance
+    - Send formatted prompts to the model and return text responses
     """
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
         """
-        Initialize the Gemini client with an API key.
+        Initialize the Gemini client.
 
         Args:
-            api_key: Optional API key. If not provided, loads from GEMINI_API_KEY
-                environment variable.
+            api_key: Optional API key. If not provided, loads from GEMINI_API_KEY.
+            model_name: Optional model name. If not provided, loads from GEMINI_MODEL
+                or falls back to a safe default.
 
         Raises:
-            ValueError: If no API key is found in arguments or environment variables.
+            ValueError: If no API key is found.
         """
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-
         if not self.api_key:
             raise ValueError(
-                "Gemini API key not found. Please set the GEMINI_API_KEY "
-                "environment variable or pass it to the constructor."
+                "Gemini API key not found. Set GEMINI_API_KEY environment variable"
             )
 
-        self.model_name = "gemini-pro"
+        # Allow choosing a different model via env var `GEMINI_MODEL` or constructor
+        self.model_name = (
+            model_name or os.getenv("GEMINI_MODEL") or "gemini-1.0"
+        )
         self._model = None
 
     def _initialize_model(self):
@@ -40,7 +45,7 @@ class GeminiClient:
         Initialize and cache the Gemini model instance.
 
         Returns:
-            The initialized Gemini model.
+            The initialized Gemini model object.
         """
         if self._model is not None:
             return self._model
@@ -48,19 +53,19 @@ class GeminiClient:
         import google.generativeai as genai
 
         genai.configure(api_key=self.api_key)
+        # Create and cache model instance
         self._model = genai.GenerativeModel(self.model_name)
         return self._model
 
     def generate_response(self, text: str) -> str:
         """
-        Generate a response from the Gemini model for the given text.
+        Generate a plain text response from the Gemini model for the given prompt.
 
         Args:
-            text: The input text to send to the model.
+            text: The full prompt text to send to the model.
 
         Returns:
-            The model's response as a string.
-            Returns an error message if generation fails.
+            The text response from the model, or an error message string.
         """
         try:
             model = self._initialize_model()
@@ -69,19 +74,20 @@ class GeminiClient:
 
         except ImportError:
             return "Error: google-generativeai library not installed."
+        except Exception as e:
+            return f"Error generating response: {e}"
+
     def generate_summary(self, text: str) -> str:
-        """
-        Generate a summary of the given text using the shared prompt template.
-        """
+        """Generate a summary using the shared prompt template."""
         prompt = SUMMARY_PROMPT.format(text=text)
+        return self.generate_response(prompt)
+
     def generate_key_concepts(self, text: str) -> str:
-        """
-        Generate key concepts from the given text using the shared prompt template.
-        """
+        """Generate key concepts using the shared prompt template."""
         prompt = KEY_CONCEPTS_PROMPT.format(text=text)
+        return self.generate_response(prompt)
+
     def generate_exam_questions(self, text: str) -> str:
-        """
-        Generate exam questions from the given text using the shared prompt template.
-        """
+        """Generate exam questions using the shared prompt template."""
         prompt = EXAM_QUESTIONS_PROMPT.format(text=text)
         return self.generate_response(prompt)
