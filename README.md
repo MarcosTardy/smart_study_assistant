@@ -1,8 +1,7 @@
-# smart_study_assistant
+## smart_study_assistant
 Smart_study_assistant es una solución IA cuyo objetivo es ayudar a los estudiantes. Esta herramienta genera resumenes, conceptos clave y preguntas de examen a partir de un PDF.
 
-##3 prompts que he utilizado
-#1er Prompt 
+## 1er Prompt 
 Act as a senior Python software engineer. I want to build a Streamlit application called AI Study Assistant.
 The application should:
 •	Allow users to upload PDF files.
@@ -18,9 +17,9 @@ Requirements:
 •	Suggest the folder structure and responsibilities of each file.
 Do not generate code yet. Only propose the architecture and development plan.
 
-A partir de este prompt el modelo LLM me generó una arquitectura demasiado compleja, con muchas carpetas y subcarpetas para estructurar el backend de la aplicación. Decidí proponerle otra más simple. 
+# A partir de este prompt el modelo LLM me generó una arquitectura demasiado compleja, con muchas carpetas y subcarpetas para estructurar el backend de la aplicación. Decidí proponerle otra más simple. 
 
-#2o Prompt
+## 2o Prompt
 You should implement a class GeminiClient:
 Use an API key from environment variables (GEMINI_API_KEY).
 It should have a method generate_response(text: str) -> str.
@@ -32,7 +31,7 @@ Use a clean structure and separate responsibilities.
 
 El modelo sugería un modelo desfasado que no permitía ejecutar las funcionalidades de la aplicación. Después de estudiar los diferentes modelos se escogió implementar "gemini-2.5-flash" que es gratuito. 
 
-#3er Prompt
+## 3er Prompt
 Now I need to build app.py.
 
 Requirements:
