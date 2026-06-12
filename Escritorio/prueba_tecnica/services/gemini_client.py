@@ -3,7 +3,7 @@
 import os
 from typing import Optional
 
-from .prompts import EXAM_QUESTIONS_PROMPT, KEY_CONCEPTS_PROMPT, SUMMARY_PROMPT
+from services.prompts import EXAM_QUESTIONS_PROMPT, KEY_CONCEPTS_PROMPT, SUMMARY_PROMPT
 
 
 class GeminiClient:
