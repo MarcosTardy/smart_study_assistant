@@ -36,7 +36,7 @@ class GeminiClient:
 
         # Allow choosing a different model via env var `GEMINI_MODEL` or constructor
         self.model_name = (
-            model_name or os.getenv("GEMINI_MODEL") or "gemini-1.0"
+            model_name or os.getenv("GEMINI_MODEL") or "gemini-2.5-flash"
         )
         self._model = None
 
